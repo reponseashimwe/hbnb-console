@@ -5,8 +5,10 @@ import os
 from datetime import datetime
 from uuid import uuid4
 
-from models import models
+import models
 from models.base_model import BaseModel
+import models.engine
+import models.engine.file_storage
 
 
 class TestBaseModel(unittest.TestCase):
@@ -116,12 +118,12 @@ class TestBaseModel(unittest.TestCase):
         self.assertTrue(hasattr(b, "name"))
 
     def test_new_method_not_called_when_dict_obj_is_passed_to_BaseModel(self):
-        my_dict = {"id": uuid4(), "created_at": datetime.utcnow().isoformat(),
-                   "updated_at": datetime.utcnow().isoformat(),
+        my_dict = {"id": uuid4(), "created_at": datetime.isoformat(),
+                   "updated_at": datetime.isoformat(),
                    "name": "Firdaus"}
         b = BaseModel(**my_dict)
-        self.assertTrue(b not in models.storage.all().values(),
-                        "{}".format(models.storage.all().values()))
+        self.assertTrue(b not in models.engine.file_storage.all().values(),
+                        "{}".format(models.engine.file_storage.all().values()))
         del b
 
         b = BaseModel()
