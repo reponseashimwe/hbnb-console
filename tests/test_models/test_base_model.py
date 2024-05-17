@@ -52,13 +52,13 @@ class TestBaseModel(unittest.TestCase):
         b = BaseModel()
         self.assertEqual(b.created_at, b.updated_at)
 
-
     def test_that_save_func_update_update_at_attr(self):
         b = BaseModel()
         b.save()
         self.assertNotEqual(b.created_at, b.updated_at)
         self.assertGreater(b.updated_at.microsecond,
                            b.created_at.microsecond)
+
     def test_if_to_dict_returns_dict(self):
         b = BaseModel()
         self.assertTrue(type(b.to_dict()) is dict)
@@ -189,9 +189,6 @@ class TestBaseModel(unittest.TestCase):
     def test_to_dict_not_dunder_dict(self):
         bm = BaseModel()
         self.assertNotEqual(bm.to_dict(), bm.__dict__)
-
-
-
 
 
 if __name__ == "__main__":

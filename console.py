@@ -264,7 +264,6 @@ class HBNBCommand(cmd.Cmd):
                 attribute_value = attribute_original_type(attribute_value)
                 setattr(obj, attribute_name, attribute_value)
 
-
         # if it doesn’t exist we add it
         else:
             obj.__dict__.update({attribute_name: attribute_value})
