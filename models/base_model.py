@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Defines BaseModel class."""
 import models
-from uuid import uuid
+from uuid import uuid4
 from datetime import datetime
 
 
@@ -20,22 +20,26 @@ class BaseModel:
     """
 
     def __init__(self, *args, **kwargs):
+        """Initialize new BaseModel."""
+
+        tform = "%Y-%m-%dT%H:%M:%S.%f"
+
+        self.id = str(uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+
         if kwargs:
-            self.id = kwargs.get("id", str(uuid.uuid4()))
-            self.created_at = datetime.fromisoformat(kwargs["created_at"]) if "created_at" in kwargs else datetime.now()
-            self.updated_at = datetime.fromisoformat(kwargs["updated_at"]) if "updated_at" in kwargs else datetime.now()
-            self.name = kwargs.get("name", "")
-            if "__class__" in kwargs:
-                del kwargs["__class__"]
+            kwargs["created_at"] = datetime.strptime(
+                kwargs["created_at"], tform)
+            kwargs["updated_at"] = datetime.strptime(
+                kwargs["updated_at"], tform)
+            del kwargs["__class__"]
+            self.__dict__.update(kwargs)
         else:
-            self.id = str(uuid.uuid4())
+            self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            self.name = ""
-
-        if args:
-            pass
-        models.storage.new(self)
+            models.storage.new(self)
 
     def save(self):
         """Set updated_at with current datetime."""
