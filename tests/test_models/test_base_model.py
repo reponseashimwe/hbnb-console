@@ -105,29 +105,36 @@ class TestBaseModel(unittest.TestCase):
     def test_when_args_and_kwargs_are_passed(self):
         dt = datetime.now()
         dt_iso = dt.isoformat()
-        b = BaseModel("1234", id="234", created_at=dt_iso, name="Firdaus")
+        b = BaseModel("1234", id="234", created_at=dt_iso, updated_at=dt_iso, name="Firdaus")
         self.assertEqual(b.id, "234")
         self.assertEqual(b.created_at, dt)
+        self.assertEqual(b.updated_at, dt)
         self.assertEqual(b.name, "Firdaus")
 
     def test_when_kwargs_passed_is_more_than_default(self):
-        my_dict = {"id": uuid4(), "created_at": datetime.utcnow().isoformat(),
-                   "updated_at": datetime.utcnow().isoformat(),
-                   "name": "Firdaus"}
-        b = BaseModel(**my_dict)
-        self.assertTrue(hasattr(b, "name"))
+         my_dict = {
+             "id": uuid4(),
+            "created_at": datetime.now().isoformat(),
+            "updated_at": datetime.now().isoformat(),
+            "name": "Firdaus"}
+         b = BaseModel(**my_dict)
+         self.assertTrue(hasattr(b, "name"))
 
-    def test_new_method_not_called_when_dict_obj_is_passed_to_BaseModel(self):
-        my_dict = {"id": uuid4(), "created_at": datetime.isoformat(),
-                   "updated_at": datetime.isoformat(),
-                   "name": "Firdaus"}
-        b = BaseModel(**my_dict)
-        self.assertTrue(b not in models.engine.file_storage.all().values(),
-                        "{}".format(models.engine.file_storage.all().values()))
-        del b
+def test_new_method_not_called_when_dict_obj_is_passed_to_BaseModel(self):
+    my_dict = {
+        "id": uuid4(),
+        "created_at": datetime.now().isoformat(),
+        "updated_at": datetime.now().isoformat(),
+        "name": "Firdaus"
+    }
+    b = BaseModel(**my_dict)
+    self.assertTrue(b not in models.engine.file_storage.all().values(),
+                    "{}".format(models.engine.file_storage.all().values()))
+    del b
 
-        b = BaseModel()
-        self.assertTrue(b in models.storage.all().values())
+    b = BaseModel()
+    self.assertTrue(b in models.storage.all().values())
+
 
     def test_that_save_method_updates_updated_at_attr(self):
         b = BaseModel()
