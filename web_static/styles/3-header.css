@@ -1,0 +1,14 @@
+header {
+  padding-top: 30px;
+  padding-left: 90px;
+  font-size: 25px;
+  color: #888;
+  font-weight: 900;
+  background-image: url(../images/icon.png);
+  background-repeat: no-repeat;
+  background-size: 50px;
+  background-position: 20px 20px;
+  height: 70px;
+  width: 100%;
+  border-bottom: 1px solid #cccccc;
+}
